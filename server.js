@@ -2,16 +2,25 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const logEvents = require('./logEvents');
-const EventEmitter = require('events');
-class Emitter extends EventEmitter { };
-const myEmitter = new Emitter();
-
+const logEvents = require('./middleware/logEvents');
 const PORT = 3500;
-//myEmitter.on('log', (msg) => logEvents(msg));
+
+//custom middleware logger
+app.use(logEvents);
+
+//middleware for handling getting form data
+app.use(express.urlencoded({ extended: false }));
+
+// middleware for json
+app.use(express.json());
+
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+})
+
+app.get('/*all', (req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 })
 
 //always at the end of file.
