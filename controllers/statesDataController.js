@@ -1,30 +1,13 @@
 const data = {};
 data.statesData = require('../model/statesData.json');
-/*const statesFactsController = require('./statesFactsController');*/
 const State = require('../model/State');
 
+const mergedData = require('../middleware/mergeStateData');
+
 const getAllStates = async (req, res) => {
-    const jsonObject = data.statesData;
-    const funFacts = await State.find();
-    console.log("Fetched from DB:", funFacts);
-    const itemMap = {};
-
-    funFacts.forEach(item => {
-        itemMap[item.stateCode] = item.funfacts;
-    });
-
-    const mergedData = jsonObject.map(obj => {
-        const stateCode = obj.code;
-        if (obj.code && itemMap[stateCode]) {
-            return {
-                ...obj,
-                funfacts: itemMap[stateCode]
-            };
-        }
-        return obj;
-    });
-
-    res.json(mergedData);
+    //call middleware mergedData.merge to merge statesData.json and the states from mongodb
+    const allStates = await mergedData.merge();
+    res.json(allStates);
 }
 
 const postStateFunFact = async (req, res) => {
@@ -43,7 +26,17 @@ const postStateFunFact = async (req, res) => {
     }
 }
 
+const filterContig = (req, res, next) => {
+    if (req.query.contig === 'true') {
+        return res.json({ message: "Only contig states" });
+    } else if (req.query.contig === 'false') {
+        return res.json({ message: "Only non-contig states" });
+    }
+    next();
+}
+
 module.exports = {
     getAllStates,
-    postStateFunFact
+    postStateFunFact,
+    filterContig
 }
