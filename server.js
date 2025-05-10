@@ -29,6 +29,8 @@ app.use(express.urlencoded({ extended: false }));
 // middleware for json
 app.use(express.json());
 
+//route to States
+app.use('/states', require('./routes/api/states'));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
