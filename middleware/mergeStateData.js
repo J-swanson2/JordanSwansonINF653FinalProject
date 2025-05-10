@@ -1,0 +1,1 @@
+//middleware to add the funfacts array to the states data? Might delete

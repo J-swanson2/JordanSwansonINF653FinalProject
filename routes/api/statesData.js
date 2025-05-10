@@ -3,9 +3,9 @@ const router = express.Router();
 const path = require('path');
 const statesDataController = require('../../controllers/statesDataController');
 
-
 router.route('/')
-    .get(statesDataController.getAllStates);
+    .get(statesDataController.getAllStates)
+    .post(statesDataController.postStateFunFact);
 
 router.route('/:id')
     .get((req, res) => {

@@ -1,9 +1,9 @@
-const State = require('../model/State')
+/*const State = require('../model/State')
 
 const getAllStateFacts = async (req, res) => {
-    const employees = await Employee.find();
-    if (!employees) return res.status(204).json({ 'message': 'No Employees found.' });
-    res.json(employees);
+    const states = await State.find();
+    if (!states) return res.status(204).json({ 'message': 'No states found.' });
+    res.json(states);
 }
 
 const createNewStateFacts = async (req, res) => {
@@ -37,10 +37,8 @@ const updateStateFacts = async (req, res) => {
     res.json(result);
 }
 
-const deleteStateFacts = (req, res)
-
 module.exports = {
     getAllStateFacts,
     createNewStateFacts,
     updateStateFacts
-}
+}*/
