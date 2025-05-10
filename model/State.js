@@ -8,3 +8,5 @@ const stateSchema = new Schema({
 	},
 	funfacts: [String]
 })
+
+module.exports = mongoose.model('State', stateSchema);

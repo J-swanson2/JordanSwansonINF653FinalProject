@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const statesController = require('../../controllers/statesController');
+const statesDataController = require('../../controllers/statesDataController');
 
 
 router.route('/')
-    .get(statesController.getAllStates);
+    .get(statesDataController.getAllStates);
 
 router.route('/:id')
     .get((req, res) => {
