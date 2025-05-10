@@ -1,8 +1,9 @@
-//require('dotenv').config();
+require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const corsOptions = ('./config/corsOptions');
 const logEvents = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const PORT = 3500;
@@ -10,17 +11,7 @@ const PORT = 3500;
 //custom middleware logger
 app.use(logEvents);
 
-const whitelist = ['localhost:3500'];
-const corsOptions = {
-    origin: (origin, callback) => {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    optionsSuccessStatus: 200
-}
+//cors options
 app.use(cors(corsOptions));
 
 //middleware for handling getting form data
@@ -35,8 +26,6 @@ app.use('/states', require('./routes/api/states'));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 })
-
-
 
 app.all('*all', (req, res) => {
     res.status(404);
