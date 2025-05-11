@@ -14,7 +14,8 @@ router.route('/:state/:value')
 
 router.route('/:state/funfact')
     .post(statesDataController.postStateFunFact)
-    .patch(statesDataController.patchStateFunFact);
+    .patch(statesDataController.patchStateFunFact)
+    .delete(statesDataController.deleteStateFunFact);
 
 
 
