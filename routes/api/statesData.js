@@ -4,8 +4,11 @@ const path = require('path');
 const statesDataController = require('../../controllers/statesDataController');
 
 router.route('/')
-    .get(statesDataController.filterContig,statesDataController.getAllStates)
+    .get(statesDataController.getStates)
     .post(statesDataController.postStateFunFact);
+
+router.route('/:state')
+    .get(statesDataController.getState);
 
 
 

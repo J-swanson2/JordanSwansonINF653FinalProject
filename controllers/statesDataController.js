@@ -1,13 +1,26 @@
-const data = {};
-data.statesData = require('../model/statesData.json');
 const State = require('../model/State');
-
 const mergedData = require('../middleware/mergeStateData');
 
-const getAllStates = async (req, res) => {
-    //call middleware mergedData.merge to merge statesData.json and the states from mongodb
+const getStates = async (req, res, next) => {
     const allStates = await mergedData.merge();
+    if (req.query.contig === 'true') {
+        const contigStates = allStates.filter(state =>
+            state.admission_number <= 48);
+        return res.json(contigStates);
+    } else if (req.query.contig === 'false') {
+        const nonContigStates = allStates.filter(state =>
+            state.admission_number > 48);
+        return res.json(nonContigStates);
+    }
     res.json(allStates);
+}
+
+const getState = async (req, res) => {
+    const code = req.params.state.toUpperCase();
+    const allStates = await mergedData.merge();
+    const oneState = allStates.find(state => state.stateCode === code);
+
+    res.json(oneState);
 }
 
 const postStateFunFact = async (req, res) => {
@@ -26,17 +39,8 @@ const postStateFunFact = async (req, res) => {
     }
 }
 
-const filterContig = (req, res, next) => {
-    if (req.query.contig === 'true') {
-        return res.json({ message: "Only contig states" });
-    } else if (req.query.contig === 'false') {
-        return res.json({ message: "Only non-contig states" });
-    }
-    next();
-}
-
 module.exports = {
-    getAllStates,
     postStateFunFact,
-    filterContig
+    getStates,
+    getState
 }
