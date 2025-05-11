@@ -46,7 +46,11 @@ const getStateValue = async (req, res) => {
         case 'admission':
             return res.json({ state: oneState.state, admission: oneState.admission_date });
         case 'funfact':
-            return res.json({ state: oneState.state, funfact: oneState.funfact[0] });
+            if (!oneState.funfacts) {
+                return res.status(404).json({ message: 'No Fun facts available for this state' });
+            }
+            const rand = Math.floor(Math.random() * oneState.funfacts.length);
+            return res.json({ state: oneState.state, funfact: oneState.funfacts[rand] });
         default: return res.status(404).json({ message: 'Invalid parameter' });
     }
 }
