@@ -56,16 +56,36 @@ const getStateValue = async (req, res) => {
 }
 
 const postStateFunFact = async (req, res) => {
-    if (!req?.body?.stateCode || !req?.body?.funfacts) {
-        return res.status(400).json({ 'message': 'State Code and Fun Facts are required' });
+    const stateCode = req.params.state.toUpperCase();
+    const allStates = await mergedData.merge();
+    const oneState = allStates.find(state => state.code === stateCode);
+
+    if (!oneState) {
+        return res.status(404).json({ message: 'Invalid state abbreviation parameter' });
+    }
+
+    const funfacts = req.body.funfacts;
+
+    if (!funfacts) {
+        return res.status(400).json({ 'message': 'Fun Facts are required' });
     }
 
     try {
-        const result = await State.create({
-            stateCode: req.body.stateCode,
-            funfacts: req.body.funfacts
-        });
-        res.status(201).json(result);
+        //check if state already in MongoDB
+        const existingState = await State.findOne({ stateCode });
+
+        //if in MongoDB, append the funfacts to the array
+        if (existingState) {
+            existingState.funfacts = existingState.funfacts.concat(funfacts);
+            const result = await existingState.save();
+            return res.status(201).json(result);
+        } else {
+            const result = await State.create({
+                stateCode,
+                funfacts
+            });
+            res.status(201).json(result);
+        }      
     } catch (err) {
         console.error(err);
     }
