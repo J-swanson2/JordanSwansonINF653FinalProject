@@ -91,9 +91,48 @@ const postStateFunFact = async (req, res) => {
     }
 }
 
+const patchStateFunFact = async (req, res) => {
+    const stateCode = req.params.state.toUpperCase();
+    const allStates = await mergedData.merge();
+    const oneState = allStates.find(state => state.code === stateCode);
+
+    if (!oneState) {
+        return res.status(404).json({ message: 'Invalid state abbreviation parameter' });
+    }
+
+    let index = req.body.index;
+    const funfact = req.body.funfact;
+
+    if (!funfact || index < 1) {
+        return res.status(400).json({ 'message': 'Fun Facts are required, and index must be greater than 0' });
+    }
+    index--;
+
+    try {
+        //check if state already in MongoDB
+        const existingState = await State.findOne({ stateCode });
+
+        //if in MongoDB, append the funfacts to the array
+        if (!existingState) {
+            return res.status(400).json({ 'message': 'No funfacts exist' });
+        }
+
+        if (index >= existingState.funfacts.length) {
+            return res.status(400).json({ 'message': 'No funfacts exist for that index' });
+        }
+
+        existingState.funfacts[index] = funfact;
+        const result = await existingState.save();
+        res.status(200).json(result);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 module.exports = {
-    postStateFunFact,
     getStates,
     getStateValue,
-    getState
+    getState,
+    postStateFunFact,
+    patchStateFunFact
 }

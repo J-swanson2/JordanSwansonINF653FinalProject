@@ -13,7 +13,8 @@ router.route('/:state/:value')
     .get(statesDataController.getStateValue);
 
 router.route('/:state/funfact')
-    .post(statesDataController.postStateFunFact);
+    .post(statesDataController.postStateFunFact)
+    .patch(statesDataController.patchStateFunFact);
 
 
 
