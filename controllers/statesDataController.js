@@ -130,7 +130,7 @@ const patchStateFunFact = async (req, res) => {
         }
 
         if (index >= existingState.funfacts.length) {
-            return res.status(400).json({ message: 'No Fun Fact found at that index for  ' + oneState.state });
+            return res.status(400).json({ message: 'No Fun Fact found at that index for ' + oneState.state });
         }
 
         existingState.funfacts[index] = funfact;
@@ -171,7 +171,7 @@ const deleteStateFunFact = async (req, res) => {
         }
 
         if (index >= existingState.funfacts.length) {
-            return res.status(400).json({ message: 'No Fun Fact found at that index for  ' + oneState.state });
+            return res.status(400).json({ message: 'No Fun Fact found at that index for ' + oneState.state });
         }
 
         existingState.funfacts.splice(index, 1);
