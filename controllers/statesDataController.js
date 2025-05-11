@@ -16,11 +16,39 @@ const getStates = async (req, res, next) => {
 }
 
 const getState = async (req, res) => {
-    const code = req.params.state.toUpperCase();
+    const stateCode = req.params.state.toUpperCase();
     const allStates = await mergedData.merge();
-    const oneState = allStates.find(state => state.stateCode === code);
+    const oneState = allStates.find(state => state.code === stateCode);
 
+    if (!oneState) {
+        return res.status(404).json({ message: 'Invalid state abbreviation parameter' });
+    }
     res.json(oneState);
+}
+
+const getStateValue = async (req, res) => {
+    const stateCode = req.params.state.toUpperCase();
+    const valueType = req.params.value.toLowerCase();
+    const allStates = await mergedData.merge();
+    const oneState = allStates.find(state => state.code === stateCode);
+
+    if (!oneState) {
+        return res.status(404).json({ message: 'Invalid state abbreviation parameter' });
+    }
+
+    switch (valueType) {
+        case 'capital':
+            return res.json({ state: oneState.state, capital: oneState.capital_city });
+        case 'nickname':
+            return res.json({ state: oneState.state, nickname: oneState.nickname });
+        case 'population':
+            return res.json({ state: oneState.state, population: oneState.population });
+        case 'admission':
+            return res.json({ state: oneState.state, admission: oneState.admission_date });
+        case 'funfact':
+            return res.json({ state: oneState.state, funfact: oneState.funfact[0] });
+        default: return res.status(404).json({ message: 'Invalid parameter' });
+    }
 }
 
 const postStateFunFact = async (req, res) => {
@@ -42,5 +70,6 @@ const postStateFunFact = async (req, res) => {
 module.exports = {
     postStateFunFact,
     getStates,
+    getStateValue,
     getState
 }

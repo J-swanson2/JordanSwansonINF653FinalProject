@@ -10,6 +10,9 @@ router.route('/')
 router.route('/:state')
     .get(statesDataController.getState);
 
+router.route('/:state/:value')
+    .get(statesDataController.getStateValue);
+
 
 
 module.exports = router;
