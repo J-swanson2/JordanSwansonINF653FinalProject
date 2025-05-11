@@ -17,7 +17,7 @@ connectDB();
 app.use(logEvents);
 
 //cors options
-app.use(cors(corsOptions));
+app.use(cors());
 
 //middleware for handling getting form data
 app.use(express.urlencoded({ extended: false }));
