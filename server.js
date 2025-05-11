@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const corsOptions = ('./config/corsOptions');
 const logEvents = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const mongoose = require('mongoose');
@@ -16,7 +15,6 @@ connectDB();
 //custom middleware logger
 app.use(logEvents);
 
-//cors options
 app.use(cors());
 
 //middleware for handling getting form data
@@ -34,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.all('*all', (req, res) => {
     res.status(404);
-    if (req.accepts('html')) {
+    if (req.accepts('text/html')) {
         res.sendFile(path.join(__dirname, 'views', '404.html'));
     }
     else if (req.accepts('json')) {
@@ -48,7 +46,6 @@ app.all('*all', (req, res) => {
 //custom error handler
 app.use(errorHandler);
 
-//always at the end of file.
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

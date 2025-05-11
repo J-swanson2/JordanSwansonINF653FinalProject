@@ -1,4 +1,4 @@
-//middleware to add the funfacts array to the states data? Might delete
+//middleware to add the funfacts array to the states data
 const data = {};
 data.statesData = require('../model/statesData.json');
 const State = require('../model/State');
@@ -6,7 +6,6 @@ const State = require('../model/State');
 async function merge(){
     const jsonObject = data.statesData;
     const funFacts = await State.find();
-    //console.log("Fetched from DB:", funFacts);
     const itemMap = {};
 
     funFacts.forEach(item => {

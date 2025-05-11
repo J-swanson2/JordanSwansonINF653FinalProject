@@ -1,5 +1,3 @@
-
-
 //const whitelist = ['localhost:3500', 'https://fluffy-ancient-peace.glitch.me'];
 
 const corsOptions = {
